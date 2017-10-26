@@ -1,29 +1,37 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+
 import * as vscode from 'vscode';
+import { ExtensionContext, workspace, WorkspaceEdit, Position } from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: ExtensionContext) {
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "use-strict-everywhere" is now active!');
+    // don't do anything if a workspace folder isn't open
+    if (!workspace) return;
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-        // The code you place here will be executed every time your command is executed
+    console.log('strict mode activated');
+
+    // looks for newly created
+    // const jsWatcher =
+        // workspace.createFileSystemWatcher('/\.jsx?$/', false, true, true);
+
+    let addUseStrict = vscode.commands.registerCommand('extension.use-strict-everywhere', () => {
+
+        let newWorkspaceEdit = new WorkspaceEdit();
+        let startOfDoc = new Position(0, 0);
+        let useStrict = '\'use strict\'\;\n\n'
+
+        // find all .js or .jsx files
+        workspace.findFiles('/\.jsx?$/')
+            // insert 'use strict'
+            .then(files => files.map(uri => workspace.applyEdit(newWorkspaceEdit.insert(uri, startOfDoc, useStrict))))
+            // save all files
+            .then(updatedFiles => workspace.saveAll(false));
 
         // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
+        vscode.window.showInformationMessage('You are now using strict mode across your workspace.');
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(addUseStrict);
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {
-}
+// files.map(file =>
