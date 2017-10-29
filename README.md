@@ -25,7 +25,7 @@ This extension does not currently add or modify any VSCode settings.
 
 Users appreciate release notes as you update your extension. -->
 
-### 1.0.0
+### 0.1.0
 
 Initial release of Use Strict Everywhere. Right now it is a blunt tool that indiscriminately adds 'use strict' to first line of every .js, .jsx, and .ts file. See "TODO" for planned modifications.
 
