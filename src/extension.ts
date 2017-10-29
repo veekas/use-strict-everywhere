@@ -1,49 +1,17 @@
 'use strict';
 
-import * as vscode from 'vscode';
-import { ExtensionContext, workspace, SnippetString, Position, Uri, TextDocument, WorkspaceEdit, TextEdit, Range } from 'vscode'; // WorkspaceEdit,
-// import * as fs from 'fs';
+import { window, commands, ExtensionContext, workspace, SnippetString, Position, Uri, TextDocument, WorkspaceEdit, TextEdit, Range } from 'vscode';
+import utils from './utils.js';
 
 export function activate (context: ExtensionContext) {
 
-    // don't do anything if a workspace folder isn't open
-    // if (!workspace) return;
+    // don't do anything if a directory isn't open
+    // if (!workspace.textDocuments.length) {
+    //     window.showInformationMessage('Please open a directory before running Use Strict Everywhere.');
+    //     return;
+    // }
 
-    console.log('strict mode activated');
-
-    // looks for newly created
-    // const jsWatcher =
-        // workspace.createFileSystemWatcher('/\.jsx?$/', false, true, true);
-
-    let addUseStrict = vscode.commands.registerCommand('extension.use-strict-everywhere', () => {
-
-        // workspace.findFiles('**/*.js', '', 100).then(r => console.log(r));
-
-        // let newWorkspaceEdit = new WorkspaceEdit();
-        // let startOfDoc = new Position(0, 0);
-        // let useStrict = `'use strict';\n\n`;
-
-        // // find all .js or .jsx files
-        // workspace.findFiles('/\.jsx?$/')
-        // // insert 'use strict'
-        // .then(files => {
-        //     console.log('these are the files:', files);
-        //     files.map(uri => workspace.applyEdit(newWorkspaceEdit.insert(uri, startOfDoc, useStrict)))
-        // })
-        // // save all files
-        // .then(updatedFiles => workspace.saveAll(true));
-        // .catch(next);
-
-        // const currentDoc = vscode.window.activeTextEditor;
-        // const jsFiles = workspace.findFiles('**∕*.js', '**∕node_modules∕**', 10);
-        // const jsFiles = workspace.findFiles(`*.{ts,js,jsx}`);
-        // const useStrict = new SnippetString().appendText(`'use strict';\n\n`);
-
-        // let startOfDoc = new Position(0, 0);
-        // let startOfDoc = createPosition(0, 0);
-        // let startRange = createRange(startOfDoc, startOfDoc)
-        // let textEdit = createTextEdit(startRange, useStrict);
-        // let newWorkspaceEdit = new WorkspaceEdit();
+    let addUseStrict = commands.registerCommand('extension.use-strict-everywhere', () => {
 
         const useStrict = `'use strict';\n\n`;
 
@@ -69,14 +37,9 @@ export function activate (context: ExtensionContext) {
             return workspaceEdit;
         }
 
-        // function getDocument(vsEditor) {
-        //     return typeof vsEditor._documentData !== 'undefined' ? vsEditor._documentData : vsEditor._document
-        // }
-
-        function applyEdit(uri, coords, content) { // vsEditor instead of uri
-            // const vsDocument = getDocument(vsEditor);
-            const edit = setEdits(uri, coords, content); // vsDocument._uri instead of uri
-            vscode.workspace.applyEdit(edit);
+        function applyEdit(uri, coords, content) {
+            const edit = setEdits(uri, coords, content);
+            workspace.applyEdit(edit);
         }
 
         let startOfDoc = {
@@ -90,28 +53,36 @@ export function activate (context: ExtensionContext) {
             }
         };
 
-        workspace.findFiles('**/*.js', '**/node_modules/**', 100)
+        const jsFiles = workspace.findFiles('**/*.js', '**/node_modules/**', 100);
+        const tsFiles = workspace.findFiles('**/*.ts', '**/node_modules/**', 100);
+        const jsxFiles = workspace.findFiles('**/*.jsx', '**/node_modules/**', 100);
+
+        const flattenArray = (array, result) => {
+            for (let i = 0; i < array.length; i++) {
+                Array.isArray(array[i])
+                    ? flattenArray(array[i], result)
+                    : result.push(array[i]);
+            }
+            return result;
+        }
+
+        Promise.all([jsFiles, tsFiles, jsxFiles])
+            .then(foundFiles => flattenArray(foundFiles, []))
             .then(files => {
                 if (!files.length || !files) {
                     console.error('There are no .js files to modify.');
                 } else {
-                    console.log('These are the files that will be modified:', files);
+                    console.log('These files will be modified:', files);
                     return files.forEach(file => {
-                        // console.log(Uri.parse(file));
-                        return applyEdit(file, startOfDoc, useStrict)
+                        return applyEdit(file, startOfDoc, useStrict);
                     });
                 }
-            });
+            })
+            .catch(error => console.error('addUseStrict action failed:', error));
 
-
-        // currentDoc.insertSnippet(useStrict, startOfDoc);
-
+        // Display a message box to the user
+        window.showInformationMessage('You are now using strict mode across your workspace.');
     });
 
     context.subscriptions.push(addUseStrict);
-
-    // Display a message box to the user
-    // vscode.window.showInformationMessage('You are now using strict mode across your workspace.');
 }
-
-// files.map(file =>

@@ -49,6 +49,12 @@ Added features X, Y, and Z.
 
 -----------------------------------------------------------------------------------------------------------
 
+## TODO
+
+* does not add 'use strict' when it already exists in document scope
+* command to remove all 'use strict'
+* choose file formats to modify (e.g. omit .ts files, include .json)
+
 ## Working with Markdown
 
 **Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
