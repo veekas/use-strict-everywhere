@@ -74,10 +74,10 @@ export function activate (context: ExtensionContext) {
             .then(uris => {
                 if (!uris.length || !uris) {
                     window.showInformationMessage('There are no javascript files to modify.');
-                    return uris.forEach(uri => {
-                        return applyEditsAndSave(uri, startOfDoc, useStrict);
-                    });
-                }
+                };
+                return uris.forEach(uri => {
+                    return applyEditsAndSave(uri, startOfDoc, useStrict);
+                });
             })
             .catch(error => console.error('addUseStrict action failed:', error));
 
