@@ -3,7 +3,7 @@
     "displayName": "Use Strict Everywhere",
     "description": "Adds 'use strict' to the beginning of every Javascript file",
     "version": "1.0.0",
-    "publisher": "Veekas Shrivastava",
+    "publisher": "veekas",
     "engines": {
         "vscode": "^1.17.0"
     },
