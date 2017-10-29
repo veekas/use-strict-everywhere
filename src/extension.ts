@@ -1,15 +1,8 @@
 'use strict';
 
 import { window, commands, ExtensionContext, workspace, SnippetString, Position, Uri, TextDocument, WorkspaceEdit, TextEdit, Range } from 'vscode';
-// import utils from './utils.js';
 
 export function activate (context: ExtensionContext) {
-
-    // don't do anything if a directory isn't open
-    // if (!workspace.textDocuments.length) {
-    //     window.showInformationMessage('Please open a directory before running Use Strict Everywhere.');
-    //     return;
-    // }
 
     let addUseStrict = commands.registerCommand('extension.use-strict-everywhere', () => {
 
@@ -32,29 +25,10 @@ export function activate (context: ExtensionContext) {
             return workspaceEdit;
         };
 
-        // const openDoc = uri => workspace.openTextDocument(uri);
-
-        // const getText = doc =>
-
-        // const getText =
-
-        // const checkForMatch = (uri, coords, matchText) => {
-        //         .then(doc => doc.getText(range))
-        //         .then(text => {
-        //             console.log(text, 'is a match:', text === matchText);
-        //             return text === matchText
-        //         })
-        // };
-
         const applyEditsAndSave = async (uri, coords, newText) => {
-            // let match = await checkForMatch(uri, useStrictCoords, 'use strict');
-            // if (!match) {
-            // workspace.openTextDocument(uri);
             const edit = setEdit(uri, coords, newText);
             workspace.applyEdit(edit)
                 .then(save => workspace.saveAll())
-
-            // } else return;
         };
 
         const flattenArray = (array, result) => {
@@ -100,23 +74,12 @@ export function activate (context: ExtensionContext) {
             .then(uris => {
                 if (!uris.length || !uris) {
                     window.showInformationMessage('There are no javascript files to modify.');
+                    return uris.forEach(uri => {
+                        return applyEditsAndSave(uri, startOfDoc, useStrict);
+                    });
                 }
-                // console.log('These files will be modified:', uris);
-                return uris.forEach(uri => {
-                    return applyEditsAndSave(uri, startOfDoc, useStrict);
-                    // save the document!
-                });
-                // console.log(uris.length);
-                // console.log(Object.getOwnPropertyNames(uris));
-                // for (let i = 0; i < uris.length; i++) {
-                //     if (!workspace.textDocuments[i]) return;
-                //     console.log(workspace.textDocuments[i].lineAt(0).text);
-                // };
             })
-            // .then(uris => uris.forEach(file => workspace.saveAll(false))
             .catch(error => console.error('addUseStrict action failed:', error));
-
-        // workspace.saveAll(false);
 
         // Display a message box to the user
         window.showInformationMessage('You are now using strict mode across your workspace.');

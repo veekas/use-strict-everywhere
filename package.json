@@ -2,8 +2,8 @@
     "name": "use-strict-everywhere",
     "displayName": "Use Strict Everywhere",
     "description": "Adds 'use strict' to the beginning of every Javascript file",
-    "version": "0.0.1",
-    "publisher": "veekas",
+    "version": "1.0.0",
+    "publisher": "Veekas Shrivastava",
     "engines": {
         "vscode": "^1.17.0"
     },
@@ -34,8 +34,5 @@
         "vscode": "^1.1.5",
         "@types/node": "^7.0.43",
         "@types/mocha": "^2.2.42"
-    },
-    "dependencies": {
-        "fs": "0.0.1-security"
     }
 }

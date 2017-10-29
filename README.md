@@ -1,6 +1,8 @@
-# use-strict-everywhere README
+# Use Strict Everywhere
 
-This is the README for your extension "use-strict-everywhere". After writing up a brief description, we recommend including the following sections.
+This extention adds a 'use strict' string to the beginning of every javascript, extendscript, and typescript document in your project directory and saves each document.
+
+To learn more about the benefits of strict mode, [see MDN's explanation here.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)
 
 ## Features
 
@@ -29,23 +31,16 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+* adds 'use strict' to documents already using strict mode in document scope
 
-## Release Notes
+<!-- ## Release Notes
 
-Users appreciate release notes as you update your extension.
+Users appreciate release notes as you update your extension. -->
 
 ### 1.0.0
 
-Initial release of ...
+Initial release of Use Strict Everywhere. Right now it is a blunt tool that indiscriminately adds 'use strict' to the document scope of every .js, .jsx, and .ts file. See "TODO" for planned modifications.
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
 
 -----------------------------------------------------------------------------------------------------------
 
@@ -53,19 +48,6 @@ Added features X, Y, and Z.
 
 * does not add 'use strict' when it already exists in document scope
 * command to remove all 'use strict'
+* undo option?
+* confirmation before saving
 * choose file formats to modify (e.g. omit .ts files, include .json)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
