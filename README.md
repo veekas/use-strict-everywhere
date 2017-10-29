@@ -21,9 +21,7 @@ This extension does not currently add or modify any VSCode settings.
 * does not ask ofr confirmation before saving dirty files
 * does not allow customization of file formats
 
-<!-- ## Release Notes
-
-Users appreciate release notes as you update your extension. -->
+## Release Notes
 
 ### 0.1.0
 
