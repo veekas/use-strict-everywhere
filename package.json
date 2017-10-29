@@ -38,5 +38,10 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/veekas/use-strict-everywhere"
+    },
+    "icon": "images/USE-icon.png",
+    "galleryBanner": {
+        "color": "#282c34",
+        "theme": "dark"
     }
 }
