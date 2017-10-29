@@ -1,6 +1,6 @@
 'use strict';
 
-import { window, commands, ExtensionContext, workspace, SnippetString, Position, Uri, TextDocument, WorkspaceEdit, TextEdit, Range } from 'vscode';
+import { window, commands, ExtensionContext, workspace, Position, WorkspaceEdit, TextEdit, Range } from 'vscode';
 
 export function activate (context: ExtensionContext) {
 
@@ -48,17 +48,6 @@ export function activate (context: ExtensionContext) {
             end: {
                 line: 0,
                 char: 0
-            }
-        };
-
-        let useStrictCoords = {
-            start: {
-                line: 0,
-                char: 1
-            },
-            end: {
-                line: 0,
-                char: 11
             }
         };
 
