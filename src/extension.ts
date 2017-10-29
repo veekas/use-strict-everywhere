@@ -1,7 +1,7 @@
 'use strict';
 
 import { window, commands, ExtensionContext, workspace, SnippetString, Position, Uri, TextDocument, WorkspaceEdit, TextEdit, Range } from 'vscode';
-import utils from './utils.js';
+// import utils from './utils.js';
 
 export function activate (context: ExtensionContext) {
 
@@ -13,34 +13,58 @@ export function activate (context: ExtensionContext) {
 
     let addUseStrict = commands.registerCommand('extension.use-strict-everywhere', () => {
 
-        const useStrict = `'use strict';\n\n`;
-
         const createPosition = (line, char) => new Position(line, char);
-
         const createRange = (start, end) => new Range(start, end);
+        const createTextEdit = (range, newText) => new TextEdit(range, newText);
+        const createWorkspaceEdit = () => new WorkspaceEdit();
 
-        const createTextEdit = (range, content) => new TextEdit(range, content);
-
-        const createEdits = (coords, content) => {
+        const createEdit = (coords, newText) => {
             const start = createPosition(coords.start.line, coords.start.char);
             const end = createPosition(coords.end.line, coords.end.char);
             const range = createRange(start, end);
-            return createTextEdit(range, content);
-        }
+            return createTextEdit(range, newText);
+        };
 
-        const createWorkspaceEdit = () => new WorkspaceEdit();
-
-        const setEdits = (uri, coords, content) => {
+        const setEdit = (uri, coords, newText) => {
             let workspaceEdit = createWorkspaceEdit();
-            const edit = createEdits(coords, content);
+            const edit = createEdit(coords, newText);
             workspaceEdit.set(uri, [edit]);
             return workspaceEdit;
-        }
+        };
 
-        function applyEdit(uri, coords, content) {
-            const edit = setEdits(uri, coords, content);
-            workspace.applyEdit(edit);
-        }
+        // const openDoc = uri => workspace.openTextDocument(uri);
+
+        // const getText = doc =>
+
+        // const getText =
+
+        // const checkForMatch = (uri, coords, matchText) => {
+        //         .then(doc => doc.getText(range))
+        //         .then(text => {
+        //             console.log(text, 'is a match:', text === matchText);
+        //             return text === matchText
+        //         })
+        // };
+
+        const applyEditsAndSave = async (uri, coords, newText) => {
+            // let match = await checkForMatch(uri, useStrictCoords, 'use strict');
+            // if (!match) {
+            // workspace.openTextDocument(uri);
+            const edit = setEdit(uri, coords, newText);
+            workspace.applyEdit(edit)
+                .then(save => workspace.saveAll())
+
+            // } else return;
+        };
+
+        const flattenArray = (array, result) => {
+            for (let i = 0; i < array.length; i++) {
+                Array.isArray(array[i])
+                    ? flattenArray(array[i], result)
+                    : result.push(array[i]);
+            };
+            return result;
+        };
 
         let startOfDoc = {
             start: {
@@ -53,32 +77,46 @@ export function activate (context: ExtensionContext) {
             }
         };
 
-        const jsFiles = workspace.findFiles('**/*.js', '**/node_modules/**', 100);
-        const tsFiles = workspace.findFiles('**/*.ts', '**/node_modules/**', 100);
-        const jsxFiles = workspace.findFiles('**/*.jsx', '**/node_modules/**', 100);
-
-        const flattenArray = (array, result) => {
-            for (let i = 0; i < array.length; i++) {
-                Array.isArray(array[i])
-                    ? flattenArray(array[i], result)
-                    : result.push(array[i]);
+        let useStrictCoords = {
+            start: {
+                line: 0,
+                char: 1
+            },
+            end: {
+                line: 0,
+                char: 11
             }
-            return result;
-        }
+        };
+
+        const useStrict = `'use strict';\n\n`;
+        const nodeModules = '**/node_modules/**';
+
+        const jsFiles = workspace.findFiles('**/*.js', nodeModules, 100);
+        const tsFiles = workspace.findFiles('**/*.ts', nodeModules, 100);
+        const jsxFiles = workspace.findFiles('**/*.jsx', nodeModules, 100);
 
         Promise.all([jsFiles, tsFiles, jsxFiles])
             .then(foundFiles => flattenArray(foundFiles, []))
-            .then(files => {
-                if (!files.length || !files) {
-                    console.error('There are no .js files to modify.');
-                } else {
-                    console.log('These files will be modified:', files);
-                    return files.forEach(file => {
-                        return applyEdit(file, startOfDoc, useStrict);
-                    });
+            .then(uris => {
+                if (!uris.length || !uris) {
+                    window.showInformationMessage('There are no javascript files to modify.');
                 }
+                // console.log('These files will be modified:', uris);
+                return uris.forEach(uri => {
+                    return applyEditsAndSave(uri, startOfDoc, useStrict);
+                    // save the document!
+                });
+                // console.log(uris.length);
+                // console.log(Object.getOwnPropertyNames(uris));
+                // for (let i = 0; i < uris.length; i++) {
+                //     if (!workspace.textDocuments[i]) return;
+                //     console.log(workspace.textDocuments[i].lineAt(0).text);
+                // };
             })
+            // .then(uris => uris.forEach(file => workspace.saveAll(false))
             .catch(error => console.error('addUseStrict action failed:', error));
+
+        // workspace.saveAll(false);
 
         // Display a message box to the user
         window.showInformationMessage('You are now using strict mode across your workspace.');
