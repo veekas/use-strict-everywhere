@@ -1,6 +1,6 @@
 # Use Strict Everywhere
 
-This extention adds a 'use strict' string to the beginning of every javascript, extendscript, and typescript document in your project directory and saves each document.
+This extension adds a 'use strict' string to the beginning of every javascript, extendscript, and typescript document in your project directory and saves each document.
 
 To learn more about the benefits of strict mode, [see MDN's explanation here.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode)
 
