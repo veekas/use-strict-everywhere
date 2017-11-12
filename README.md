@@ -18,7 +18,7 @@ This extension does not currently add or modify any VSCode settings.
 
 * adds 'use strict' to documents already listing 'use strict' on first line
 * unable to undo 'use strict command'
-* does not ask ofr confirmation before saving dirty files
+* does not ask for confirmation before saving dirty files
 * does not allow customization of file formats
 
 ## Release Notes
