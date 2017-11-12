@@ -2,7 +2,7 @@
     "name": "use-strict-everywhere",
     "displayName": "Use Strict Everywhere",
     "description": "Adds 'use strict' to the beginning of every Javascript file",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "publisher": "veekas",
     "engines": {
         "vscode": "^1.17.0"
